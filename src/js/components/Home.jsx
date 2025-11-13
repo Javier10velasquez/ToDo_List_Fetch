@@ -9,45 +9,35 @@ const Home = () => {
   
   //Con el useEffect me traigo el get de todas las tareas que tiene el usuario cuando se monta el component, el metodo GET que esta en la documentación del API de 4Geeks
 
-  useEffect(() => {
-
-    async function getTareas(){
-
-      try{
-        const response = await fetch("https://playground.4geeks.com/todo/users/javier_velasquez_rojas");
-        const data = await response.json();
-        setLista(data.todos); 
-      } catch (error){
-
-        console.log(error);
-      }
-
+useEffect(() => {
+  async function getTareas() {
+    try {
+      const response = await fetch(
+        'https://playground.4geeks.com/todo/users/javier_velasquez_rojas'
+      );
+      const data = await response.json();
+      setLista(data.todos); 
+    } catch (error) {
+      console.log(error);
     }
-     getTareas();
+  }
+  getTareas();
   }, []);
 
-// Acá no uso useEffect por que lo que quiero es setear las tareas con el metodo post y no re imprimir el componente
 
-    async function agregarTarea() {
-    const resp = await fetch("https://playground.4geeks.com/todo/todos/javier_velasquez_rojas", {
-
-  // consulto el metodo de la documentación para insertar parametros curl -X 'POST' \
-  //'https://playground.4geeks.com/todo/todos/javier_velasquez_rojas' \
-  //-H 'accept: application/json' \
-  //-H 'Content-Type: application/json' \
-  //-d '{
-  //"label": "Mover el coche",
-  //"is_done": false
-  //}'
-
+async function agregarTarea() {
+  const resp = await fetch(
+    "https://playground.4geeks.com/todo/todos/javier_velasquez_rojas",
+    {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ label: tarea, done: false }),
-    });
-    const nueva = await resp.json();
-    setLista([...lista, nueva]);
-    setTarea("");
-  }
+      body: JSON.stringify({ label: tarea, is_done: false }), 
+    }
+  );
+  const nueva = await resp.json();
+  setLista([...lista, nueva]);
+  setTarea("");
+}
 
 // Async para borrar tareas que va en el button de la lista
 
@@ -70,17 +60,20 @@ async function borrarTarea(id) {
 }
 
 
-
   return (
     <div className="text-center">
       <h1 className="text-center mt-5">La lista de tareas con Fetch</h1>
-      <ul >
-        
-        {lista.map((item) => (<li key={item.id}>{item.label} <span> ---- </span> 
-        <button  onClick={() => borrarTarea(item.id)} >X</button> 
-        </li>))}  
-        
+
+
+      <ul>
+        {lista.map((item) => (
+          <li key={item.id}>{item.label} <span> ---- </span>
+          <button onClick={() => borrarTarea(item.id)}>X</button>
+            
+          </li>
+        ))}
       </ul>
+
 	  <br/>
 
       <input
@@ -91,6 +84,9 @@ async function borrarTarea(id) {
       />
       <button onClick={agregarTarea}>Agregar</button>
 
+
+
+    
 
 
     </div>
